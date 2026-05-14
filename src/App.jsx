@@ -1,13 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Home from './components/Home';
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <h1 className="text-3xl font-bold text-sprout-primary">
-        Hello Sprout 🌱
-      </h1>
+    <div className="min-h-screen bg-sprout-bg flex items-center justify-center p-4">
+      <Home />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
