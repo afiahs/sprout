@@ -1,24 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function BrainDump({ onNavigate }) {
-  // These variables hold our app's temporary memory (state)
   const [dumpText, setDumpText] = useState('');
-  const [tasks, setTasks] = useState([]);
-  const [isOrganized, setIsOrganized] = useState(false);
+  
+  // 1. INITIALIZE FROM MEMORY:
+  // Instead of starting empty, we look inside localStorage first.
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem('sprout-tasks');
+    // If we found saved tasks, parse them from text back into code. Otherwise, start empty [].
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
 
-  // This function turns the messy paragraph into a neat checklist
+  const [isOrganized, setIsOrganized] = useState(() => {
+    const savedState = localStorage.getItem('sprout-organized');
+    return savedState === 'true';
+  });
+
+  // 2. SAVE TO MEMORY:
+  // Every time 'tasks' or 'isOrganized' changes, this runs automatically.
+  useEffect(() => {
+    localStorage.setItem('sprout-tasks', JSON.stringify(tasks));
+    localStorage.setItem('sprout-organized', isOrganized);
+  }, [tasks, isOrganized]);
+
   const handleOrganize = () => {
-    if (!dumpText.trim()) return; // Don't do anything if it's empty
+    if (!dumpText.trim()) return; 
     
-    // Split the text every time the user hits "Enter" (new line)
     const splitTasks = dumpText.split('\n').filter(task => task.trim() !== '');
-    
-    // Turn those lines into task objects with a checkbox status
     setTasks(splitTasks.map(task => ({ text: task, completed: false })));
     setIsOrganized(true);
+    setDumpText(''); // Clear the typing box after organizing
   };
 
-  // This function crosses off a task when clicked
   const toggleTask = (index) => {
     const newTasks = [...tasks];
     newTasks[index].completed = !newTasks[index].completed;
@@ -27,7 +40,6 @@ function BrainDump({ onNavigate }) {
 
   return (
     <div className="max-w-md w-full bg-white rounded-[2rem] shadow-sm p-8 border border-gray-100">
-      {/* Back Button */}
       <button 
         onClick={() => onNavigate('home')}
         className="text-gray-400 hover:text-gray-600 text-sm mb-6 flex items-center gap-1 transition-colors"
@@ -36,11 +48,10 @@ function BrainDump({ onNavigate }) {
       </button>
 
       {!isOrganized ? (
-        // UI: The Messy Typing Screen
         <div className="flex flex-col gap-4 animate-fade-in">
           <h2 className="text-2xl font-medium text-sprout-text">Brain Dump 🧠</h2>
           <p className="text-gray-400 text-sm">
-            Type everything on your mind. Just brain vomit. Hit 'Enter' to separate thoughts. We will organize it for you.
+            Type everything on your mind. Just brain vomit. Hit 'Enter' to separate thoughts.
           </p>
           <textarea 
             className="w-full h-40 p-4 bg-sprout-bg border-none rounded-xl resize-none focus:ring-2 focus:ring-sprout-primary outline-none text-sprout-text transition-all"
@@ -56,7 +67,6 @@ function BrainDump({ onNavigate }) {
           </button>
         </div>
       ) : (
-        // UI: The Organized Checklist Screen
         <div className="flex flex-col gap-4 animate-fade-in">
           <h2 className="text-2xl font-medium text-sprout-text">Your Tasks 🌱</h2>
           <div className="flex flex-col gap-3 mt-2">
@@ -74,11 +84,16 @@ function BrainDump({ onNavigate }) {
               </div>
             ))}
           </div>
+          
+          {/* Button to clear memory and start over */}
           <button 
-            onClick={() => setIsOrganized(false)}
+            onClick={() => {
+              setIsOrganized(false);
+              setTasks([]); // This clears the tasks when going back
+            }}
             className="text-gray-400 text-sm mt-4 hover:text-gray-600 transition-colors"
           >
-            ← Wait, I need to add more
+            ← Clear list and start over
           </button>
         </div>
       )}
