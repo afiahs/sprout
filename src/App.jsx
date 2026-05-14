@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Home from './components/Home';
 import BrainDump from './components/BrainDump';
 import Timer from './components/Timer';
+import MicroSteps from './components/MicroSteps';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
@@ -14,6 +15,10 @@ function App() {
       
       {currentScreen === 'brainDump' && (
         <BrainDump onNavigate={setCurrentScreen} />
+      )}
+
+      {currentScreen === 'microSteps' && (
+        <MicroSteps onNavigate={setCurrentScreen} />
       )}
 
       {currentScreen === 'timer' && (
