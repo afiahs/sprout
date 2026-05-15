@@ -1,10 +1,39 @@
 @import "tailwindcss";
 
 @theme {
+  /* Our Base Colors */
   --color-sprout-bg: #FAF9F6;
   --color-sprout-primary: #C1D7AE;
   --color-sprout-text: #475569;
   --color-sprout-peach: #FCDDB0;
+  
+  /* New Dreamy Blob Colors */
+  --color-sprout-lavender: #E9D5FF;
+  --color-sprout-pink: #FBCFE8;
+  --color-sprout-blue: #BFDBFE;
+
+  /* Custom Animations */
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-blob: blob 7s infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 body {
