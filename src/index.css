@@ -17,7 +17,19 @@
   --animate-blob: blob 7s infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-breathe: breathe 6s infinite ease-in-out;
-}
+/* Sleepy Dark Mode Overrides */
+.dark {
+  --color-sprout-bg: #12121A;       /* Deep midnight sky */
+  --color-sprout-text: #E2E8F0;     /* Soft moonlight white */
+  --color-sprout-primary: #52794A;  /* Dimmer, calmer green */
+  --color-sprout-peach: #4A343A;    /* Dark plum */
+  
+  /* Dimmed Blob Colors */
+  --color-sprout-lavender: #2D243F;
+  --color-sprout-pink: #3D2230;
+  --color-sprout-blue: #1E293B;
+}}
+
 
 /* Animation Keyframes */
 @keyframes fadeIn {
