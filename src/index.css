@@ -1,37 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  /* Our Base Colors */
+  /* Base Colors */
   --color-sprout-bg: #FAF9F6;
   --color-sprout-primary: #C1D7AE;
   --color-sprout-text: #475569;
   --color-sprout-peach: #FCDDB0;
-  
-  /* New Dreamy Blob Colors */
   --color-sprout-lavender: #E9D5FF;
   --color-sprout-pink: #FBCFE8;
   --color-sprout-blue: #BFDBFE;
+
+  /* UI Surface Colors */
+  --color-sprout-card: rgba(255, 255, 255, 0.6);
+  --color-sprout-border: rgba(255, 255, 255, 0.5);
+  --color-sprout-btn: rgba(255, 255, 255, 0.7);
 
   /* Custom Animations */
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-blob: blob 7s infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-breathe: breathe 6s infinite ease-in-out;
-/* Sleepy Dark Mode Overrides */
+}
+
+/* 🌙 Midnight Blue Dark Mode Overrides */
 .dark {
-  --color-sprout-bg: #12121A;       /* Deep midnight sky */
-  --color-sprout-text: #E2E8F0;     /* Soft moonlight white */
-  --color-sprout-primary: #52794A;  /* Dimmer, calmer green */
-  --color-sprout-peach: #4A343A;    /* Dark plum */
-  
-  /* Dimmed Blob Colors */
-  --color-sprout-lavender: #2D243F;
-  --color-sprout-pink: #3D2230;
-  --color-sprout-blue: #1E293B;
-}}
+  --color-sprout-bg: #12121A;       
+  --color-sprout-text: #E2E8F0;     
+  --color-sprout-primary: #3B5735;  
+  --color-sprout-peach: #4A343A;    
+  --color-sprout-lavender: #2D243F; 
+  --color-sprout-pink: #3D2230;     
+  --color-sprout-blue: #1E293B;     
 
+  /* Dark Mode Surfaces */
+  --color-sprout-card: rgba(30, 41, 59, 0.4); 
+  --color-sprout-border: rgba(255, 255, 255, 0.1);
+  --color-sprout-btn: rgba(30, 41, 59, 0.6);
+}
 
-/* Animation Keyframes */
 @keyframes fadeIn {
   0% { opacity: 0; transform: translateY(10px); }
   100% { opacity: 1; transform: translateY(0); }
@@ -49,7 +55,6 @@
   50% { transform: translateY(-10px); }
 }
 
-/* New Breathing Keyframes */
 @keyframes breathe {
   0%, 100% { transform: scale(1); opacity: 0.3; }
   50% { transform: scale(1.8); opacity: 0.1; }
@@ -59,4 +64,5 @@ body {
   background-color: var(--color-sprout-bg);
   color: var(--color-sprout-text);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
