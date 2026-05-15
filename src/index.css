@@ -16,6 +16,7 @@
   --animate-fade-in: fadeIn 0.5s ease-out;
   --animate-blob: blob 7s infinite;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-breathe: breathe 6s infinite ease-in-out;
 }
 
 /* Animation Keyframes */
@@ -34,6 +35,12 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+/* New Breathing Keyframes */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.8); opacity: 0.1; }
 }
 
 body {
