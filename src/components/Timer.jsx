@@ -9,7 +9,7 @@ function Timer({ onNavigate }) {
 
   // --- PRESETS ---
   const presets = [
-    { label: '5s (Test)', value: 0.0833 }, // Keep this for testing right now!
+    { label: '5m', value: 5 },
     { label: '15m', value: 15 },
     { label: '25m', value: 25 },
     { label: '45m', value: 45 },
