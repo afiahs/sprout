@@ -1,102 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function BrainDump({ onNavigate }) {
   const [dumpText, setDumpText] = useState('');
-  
-  // 1. INITIALIZE FROM MEMORY:
-  // Instead of starting empty, we look inside localStorage first.
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('sprout-tasks');
-    // If we found saved tasks, parse them from text back into code. Otherwise, start empty [].
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+  const [isCleared, setIsCleared] = useState(false);
 
-  const [isOrganized, setIsOrganized] = useState(() => {
-    const savedState = localStorage.getItem('sprout-organized');
-    return savedState === 'true';
-  });
-
-  // 2. SAVE TO MEMORY:
-  // Every time 'tasks' or 'isOrganized' changes, this runs automatically.
-  useEffect(() => {
-    localStorage.setItem('sprout-tasks', JSON.stringify(tasks));
-    localStorage.setItem('sprout-organized', isOrganized);
-  }, [tasks, isOrganized]);
-
-  const handleOrganize = () => {
-    if (!dumpText.trim()) return; 
+  const handleClear = () => {
+    if (dumpText.trim() === '') return; // Don't clear if it's already empty
     
-    const splitTasks = dumpText.split('\n').filter(task => task.trim() !== '');
-    setTasks(splitTasks.map(task => ({ text: task, completed: false })));
-    setIsOrganized(true);
-    setDumpText(''); // Clear the typing box after organizing
-  };
-
-  const toggleTask = (index) => {
-    const newTasks = [...tasks];
-    newTasks[index].completed = !newTasks[index].completed;
-    setTasks(newTasks);
+    setDumpText('');
+    setIsCleared(true);
+    
+    // Hide the success message after 3 seconds
+    setTimeout(() => {
+      setIsCleared(false);
+    }, 3000);
   };
 
   return (
-    <div className="max-w-md w-full bg-white rounded-[2rem] shadow-sm p-8 border border-gray-100">
-      <button 
-        onClick={() => onNavigate('home')}
-        className="text-gray-400 hover:text-gray-600 text-sm mb-6 flex items-center gap-1 transition-colors"
-      >
-        ← Back to home
-      </button>
+    <div className="relative min-h-[500px] w-full max-w-md flex flex-col items-center justify-center animate-fade-in p-6">
+      
+      {/* Back Button */}
+      <div className="w-full flex justify-start mb-4 z-20">
+        <button 
+          onClick={() => onNavigate('home')}
+          className="text-gray-400 hover:text-sprout-text transition-colors font-medium text-sm flex items-center gap-2"
+        >
+          ← Back to safe space
+        </button>
+      </div>
 
-      {!isOrganized ? (
-        <div className="flex flex-col gap-4 animate-fade-in">
-          <h2 className="text-2xl font-medium text-sprout-text">Brain Dump 🧠</h2>
-          <p className="text-gray-400 text-sm">
-            Type everything on your mind. Just brain vomit. Hit 'Enter' to separate thoughts.
-          </p>
-          <textarea 
-            className="w-full h-40 p-4 bg-sprout-bg border-none rounded-xl resize-none focus:ring-2 focus:ring-sprout-primary outline-none text-sprout-text transition-all"
-            placeholder="I have to write an essay, and email my professor, and do the laundry..."
+      {/* Glassmorphism Card */}
+      <div className="relative w-full bg-white/60 backdrop-blur-xl rounded-[2.5rem] shadow-lg border border-white/50 p-8 flex flex-col items-center z-10 min-h-[450px]">
+        
+        <div className="text-4xl mb-2">☁️</div>
+        <h2 className="text-2xl font-medium text-sprout-text mb-2 text-center tracking-tight">Empty your mind.</h2>
+        <p className="text-sm text-gray-500 mb-6 text-center">
+          Type everything taking up space in your head. It doesn't have to make sense.
+        </p>
+
+        {/* Text Area */}
+        <div className="w-full relative mb-6">
+          <textarea
             value={dumpText}
             onChange={(e) => setDumpText(e.target.value)}
+            placeholder="I'm feeling overwhelmed by..."
+            className="w-full h-48 bg-white/70 border border-white/50 rounded-2xl p-4 text-sprout-text focus:outline-none focus:ring-2 focus:ring-sprout-blue/50 resize-none shadow-sm placeholder:text-gray-300 transition-all"
           ></textarea>
-          <button 
-            onClick={handleOrganize}
-            className="bg-sprout-primary bg-opacity-40 hover:bg-opacity-60 text-sprout-text py-4 rounded-xl font-medium transition-all"
-          >
-            Organize my thoughts
-          </button>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4 animate-fade-in">
-          <h2 className="text-2xl font-medium text-sprout-text">Your Tasks 🌱</h2>
-          <div className="flex flex-col gap-3 mt-2">
-            {tasks.map((task, index) => (
-              <div key={index} className="flex items-center gap-3 p-4 bg-sprout-bg rounded-xl">
-                <input 
-                  type="checkbox" 
-                  checked={task.completed}
-                  onChange={() => toggleTask(index)}
-                  className="w-5 h-5 accent-sprout-primary cursor-pointer rounded-md"
-                />
-                <span className={`text-sprout-text transition-all duration-300 ${task.completed ? 'line-through opacity-40' : ''}`}>
-                  {task.text}
-                </span>
-              </div>
-            ))}
-          </div>
           
-          {/* Button to clear memory and start over */}
+          {/* Gentle success overlay when cleared */}
+          {isCleared && (
+            <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-2xl flex items-center justify-center animate-fade-in">
+              <span className="text-sprout-text font-medium flex items-center gap-2">
+                ✨ Mind cleared. You can let it go now.
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex w-full gap-4">
           <button 
-            onClick={() => {
-              setIsOrganized(false);
-              setTasks([]); // This clears the tasks when going back
-            }}
-            className="text-gray-400 text-sm mt-4 hover:text-gray-600 transition-colors"
+            onClick={handleClear}
+            disabled={dumpText.trim() === ''}
+            className={`flex-1 py-3 px-6 rounded-full font-medium transition-all ${
+              dumpText.trim() === '' 
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                : 'bg-sprout-peach/50 hover:bg-sprout-peach/80 text-sprout-text hover:shadow-md hover:-translate-y-0.5'
+            }`}
           >
-            ← Clear list and start over
+            Clear the clutter
           </button>
         </div>
-      )}
+
+      </div>
     </div>
   );
 }
